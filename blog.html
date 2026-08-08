@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .blog-grid { display:grid; grid-template-columns:1fr; gap:1.8rem; }
+  @media (min-width:700px){ .blog-grid { grid-template-columns:repeat(2,1fr); } }
+  @media (min-width:1100px){ .blog-grid { grid-template-columns:repeat(3,1fr); } }
+  .blog-card { cursor:pointer; }
+  .blog-card-img { aspect-ratio:4/3; border-radius:var(--radius-md); overflow:hidden; margin-bottom:0.8rem; }
+  .blog-card-img img { width:100%; height:100%; object-fit:cover; transition:transform var(--transition-slow); }
+  .blog-card:hover .blog-card-img img { transform:scale(1.05); }
+  .category-chips { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:2rem; }
+  .category-chip { padding:0.5rem 1.1rem; border:1px solid var(--color-gray-300); border-radius:999px; font-size:0.78rem; font-weight:600; }
+  .category-chip.active { background:var(--color-black); color:#fff; border-color:var(--color-black); }
+
+  .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:300; opacity:0; visibility:hidden; transition:opacity var(--transition-mid); }
+  .modal-overlay.active { opacity:1; visibility:visible; }
+  .modal-box { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:min(700px,92vw); max-height:86vh; overflow-y:auto; background:#fff; border-radius:var(--radius-lg); z-index:301; opacity:0; visibility:hidden; transition:all var(--transition-mid); }
+  .modal-overlay.active + .modal-box, .modal-box.active { opacity:1; visibility:visible; }
+  .modal-box img { width:100%; aspect-ratio:16/9; object-fit:cover; }
+  .modal-box-content { padding:2rem; }
+
+  .publish-panel { max-width:640px; margin:0 auto; background:var(--color-white-off); border-radius:var(--radius-md); padding:2rem; }
+  .form-field { margin-bottom:1rem; }
+  .form-field label { display:block; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem; color:var(--color-gray-700); }
+  .form-field input, .form-field textarea, .form-field select {
+    width:100%; padding:0.85rem 1rem; border:1px solid var(--color-gray-300); border-radius:8px; outline:none; font-size:0.9rem; font-family:inherit;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left"><button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button></div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+  <div class="quicklinks"><div class="quicklinks-track" data-quicklinks></div></div>
+</header>
+
+<section style="padding:3rem 0 1rem;">
+  <div class="container text-center">
+    <span class="section-label">Black Titan Journal</span>
+    <h1 class="section-title">Blog</h1>
+    <p style="max-width:560px;margin:0.8rem auto 0;color:var(--color-gray-500);">
+      Moda, tendencias, lanzamientos y estilo de vida desde la comunidad Black Titan.
+    </p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="category-chips" data-category-chips></div>
+    <div class="blog-grid" data-blog-grid></div>
+  </div>
+</section>
+
+<!-- PANEL DEL DUEÑO: PUBLICAR CONTENIDO -->
+<section class="section" style="background:var(--color-white-off);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">Panel Del Administrador</span>
+      <h2 class="section-title" style="font-size:2rem;">Publicar Nueva Entrada</h2>
+    </div>
+    <div class="publish-panel">
+      <form data-publish-form>
+        <div class="form-field"><label>Título</label><input type="text" required data-field="title"></div>
+        <div class="form-field">
+          <label>Categoría</label>
+          <select data-field="category">
+            <option>Tendencias</option>
+            <option>Lanzamientos</option>
+            <option>Estilo de vida</option>
+          </select>
+        </div>
+        <div class="form-field"><label>URL de imagen</label><input type="url" required placeholder="https://..." data-field="image"></div>
+        <div class="form-field"><label>Resumen corto</label><input type="text" required data-field="excerpt"></div>
+        <div class="form-field"><label>Contenido</label><textarea rows="4" required data-field="content"></textarea></div>
+        <button type="submit" class="btn btn-primary">Publicar Entrada</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- MODAL DE ARTÍCULO -->
+<div class="modal-overlay" data-modal-overlay></div>
+<div class="modal-box" data-modal-box>
+  <button class="btn-icon" data-close-modal style="position:absolute;top:1rem;right:1rem;background:#fff;border-radius:50%;">✕</button>
+  <div data-modal-content></div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" data-overlay></div>
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header"><span class="drawer-title">Carrito</span><button class="btn-icon" data-close-drawer>✕</button></div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm"><span style="font-weight:600;">Subtotal</span><span style="font-weight:700;" data-cart-subtotal>$0.00</span></div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header"><span class="drawer-title">Mi Cuenta</span><button class="btn-icon" data-close-drawer>✕</button></div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/blog.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda — BLACK TITAN</title>
+<meta name="description" content="Explora el catálogo completo de Black Titan.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left">
+      <button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button>
+    </div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+
+  <div class="quicklinks">
+    <div class="quicklinks-track" data-quicklinks></div>
+  </div>
+</header>
+
+<!-- ================= TÍTULO ================= -->
+<section style="padding:2.5rem 0 0;">
+  <div class="container text-center">
+    <span class="section-label">Catálogo Completo</span>
+    <h1 class="section-title">La Tienda</h1>
+  </div>
+</section>
+
+<!-- ================= TOOLBAR: FILTROS / ORDEN / BÚSQUEDA ================= -->
+<section>
+  <div class="container">
+    <div class="filters-bar">
+
+      <!-- Filtro Categoría -->
+      <div class="filter-dropdown" data-dropdown>
+        <button class="filter-toggle" data-dropdown-toggle>
+          <span class="filter-label-text">Categoría</span> <span data-icon-chevron></span>
+        </button>
+        <div class="filter-panel" data-filter-category></div>
+      </div>
+
+      <!-- Filtro Talla -->
+      <div class="filter-dropdown" data-dropdown>
+        <button class="filter-toggle" data-dropdown-toggle>
+          <span class="filter-label-text">Talla</span> <span data-icon-chevron></span>
+        </button>
+        <div class="filter-panel" data-filter-size></div>
+      </div>
+
+      <!-- Filtro Color -->
+      <div class="filter-dropdown" data-dropdown>
+        <button class="filter-toggle" data-dropdown-toggle>
+          <span class="filter-label-text">Color</span> <span data-icon-chevron></span>
+        </button>
+        <div class="filter-panel" data-filter-color></div>
+      </div>
+
+      <!-- Ordenar -->
+      <div class="filter-dropdown">
+        <select class="filter-toggle" data-sort-select style="appearance:none;">
+          <option value="newest">Novedades</option>
+          <option value="price-asc">Precio: Menor a Mayor</option>
+          <option value="price-desc">Precio: Mayor a Menor</option>
+          <option value="rating">Mejor Valorados</option>
+        </select>
+      </div>
+
+      <!-- Búsqueda inline -->
+      <div class="search-bar" style="max-width:260px;">
+        <input type="text" placeholder="Buscar..." data-inline-search>
+      </div>
+
+      <button class="btn btn-sm btn-outline" data-clear-filters style="margin-left:auto;">Limpiar Filtros</button>
+    </div>
+
+    <p style="font-size:0.85rem;color:var(--color-gray-500);margin-bottom:1rem;" data-results-count></p>
+  </div>
+</section>
+
+<!-- ================= GRID DE PRODUCTOS ================= -->
+<section class="section" style="padding-top:1rem;">
+  <div class="container">
+    <div class="products-grid" data-products-grid></div>
+    <div class="empty-state hidden" data-empty-state>
+      No encontramos productos con esos filtros. Intenta ajustar tu búsqueda.
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= DRAWERS ================= -->
+<div class="overlay" data-overlay></div>
+
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header">
+    <span class="drawer-title">Carrito</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm">
+      <span style="font-weight:600;">Subtotal</span>
+      <span style="font-weight:700;" data-cart-subtotal>$0.00</span>
+    </div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header">
+    <span class="drawer-title">Mi Cuenta</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/tienda.js"></script>
+</body>
+</html>

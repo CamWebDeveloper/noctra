@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Administrador — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  body { background: var(--color-white-off); }
+  .admin-header { background:var(--color-black); color:#fff; padding:1.2rem 0; }
+  .admin-header .container { display:flex; justify-content:space-between; align-items:center; }
+  .admin-layout { display:grid; grid-template-columns:1fr; gap:2rem; padding:2rem 0 4rem; }
+  @media (min-width:900px){ .admin-layout { grid-template-columns:220px 1fr; } }
+  .admin-sidebar { display:flex; flex-direction:row; overflow-x:auto; gap:0.5rem; }
+  @media (min-width:900px){ .admin-sidebar { flex-direction:column; } }
+  .admin-nav-btn { padding:0.9rem 1.2rem; border-radius:8px; font-size:0.88rem; font-weight:600; text-align:left; white-space:nowrap; background:#fff; }
+  .admin-nav-btn.active { background:var(--color-black); color:#fff; }
+  .admin-panel { display:none; }
+  .admin-panel.active { display:block; }
+  .admin-card { background:#fff; border-radius:var(--radius-md); padding:1.5rem; margin-bottom:1.5rem; }
+  .stats-mini { display:grid; grid-template-columns:repeat(2,1fr); gap:1rem; margin-bottom:2rem; }
+  @media (min-width:700px){ .stats-mini { grid-template-columns:repeat(4,1fr); } }
+  .stat-mini-box { background:#fff; border-radius:var(--radius-md); padding:1.2rem; text-align:center; }
+  .stat-mini-number { font-family:var(--font-display); font-size:2rem; }
+  .stat-mini-label { font-size:0.75rem; color:var(--color-gray-500); text-transform:uppercase; letter-spacing:0.05em; }
+
+  table { width:100%; border-collapse:collapse; }
+  th, td { text-align:left; padding:0.8rem 0.6rem; border-bottom:1px solid var(--color-gray-100); font-size:0.85rem; vertical-align:middle; }
+  th { font-size:0.72rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-gray-500); }
+  .table-thumb { width:50px; height:60px; object-fit:cover; border-radius:6px; }
+  .inline-input { width:80px; padding:0.4rem 0.5rem; border:1px solid var(--color-gray-300); border-radius:6px; font-size:0.82rem; }
+  .table-wrap { overflow-x:auto; }
+
+  .form-field { margin-bottom:1rem; }
+  .form-field label { display:block; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem; color:var(--color-gray-700); }
+  .form-field input, .form-field textarea {
+    width:100%; padding:0.85rem 1rem; border:1px solid var(--color-gray-300); border-radius:8px; outline:none; font-size:0.9rem; font-family:inherit;
+  }
+  .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .badge-status { font-size:0.72rem; font-weight:700; padding:0.3rem 0.7rem; border-radius:999px; }
+  .badge-instock { background:#e5f5ec; color:var(--color-success); }
+  .badge-outstock { background:#fbe6e6; color:var(--color-danger); }
+</style>
+</head>
+<body>
+
+<div class="admin-header">
+  <div class="container">
+    <a href="index.html" class="logo" style="font-size:1.3rem;">BLACK TITAN <span style="color:var(--color-silver);font-family:var(--font-body);font-size:0.7rem;letter-spacing:0.1em;">ADMIN</span></a>
+    <a href="index.html" class="btn btn-ghost btn-sm">Ver Tienda →</a>
+  </div>
+</div>
+
+<div class="container admin-layout">
+  <nav class="admin-sidebar">
+    <button class="admin-nav-btn active" data-admin-tab="resumen">Resumen</button>
+    <button class="admin-nav-btn" data-admin-tab="productos">Productos</button>
+    <button class="admin-nav-btn" data-admin-tab="promociones">Promociones</button>
+    <button class="admin-nav-btn" data-admin-tab="pedidos">Pedidos</button>
+  </nav>
+
+  <div>
+    <!-- ===== RESUMEN ===== -->
+    <div class="admin-panel active" data-panel="resumen">
+      <div class="stats-mini" data-admin-stats></div>
+      <div class="admin-card">
+        <h3 style="margin-bottom:1rem;">Bienvenido al panel de Black Titan</h3>
+        <p style="color:var(--color-gray-500);font-size:0.9rem;">
+          Desde aquí puedes agregar productos, cambiar precios, subir fotografías, controlar el inventario,
+          activar o desactivar promociones y revisar los pedidos de tus clientes. Todos los cambios se reflejan
+          al instante en la tienda.
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== PRODUCTOS ===== -->
+    <div class="admin-panel" data-panel="productos">
+      <div class="flex-between mb-md">
+        <h2 style="font-family:var(--font-display);font-size:1.6rem;">Gestión De Productos</h2>
+        <button class="btn btn-primary btn-sm" data-new-product>+ Nuevo Producto</button>
+      </div>
+
+      <div class="admin-card">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Foto</th><th>Nombre</th><th>Colección</th><th>Precio</th><th>Stock</th><th>Estado</th><th>Acciones</th></tr>
+            </thead>
+            <tbody data-products-table></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FORMULARIO PRODUCTO -->
+      <div class="admin-card hidden" data-product-form-card>
+        <h3 style="margin-bottom:1rem;" data-form-title>Nuevo Producto</h3>
+        <form data-product-form>
+          <input type="hidden" data-field="id">
+          <div class="form-row-2">
+            <div class="form-field"><label>Nombre</label><input type="text" required data-field="name"></div>
+            <div class="form-field">
+              <label>Colección</label>
+              <select data-field="collectionId" required style="width:100%;padding:0.85rem 1rem;border:1px solid var(--color-gray-300);border-radius:8px;" data-collection-select></select>
+            </div>
+          </div>
+          <div class="form-row-2">
+            <div class="form-field"><label>Precio (USD)</label><input type="number" step="0.01" min="0" required data-field="price"></div>
+            <div class="form-field"><label>Stock</label><input type="number" min="0" required data-field="stock"></div>
+          </div>
+          <div class="form-field"><label>Descripción corta</label><input type="text" required data-field="description"></div>
+          <div class="form-field"><label>Descripción detallada</label><textarea rows="3" required data-field="descriptionLong"></textarea></div>
+          <div class="form-field"><label>URLs de fotos (separadas por coma)</label><textarea rows="2" required placeholder="https://... , https://..." data-field="images"></textarea></div>
+          <div class="form-row-2">
+            <div class="form-field"><label>Tallas (separadas por coma)</label><input type="text" required placeholder="S, M, L, XL" data-field="sizes"></div>
+            <div class="form-field"><label>Colores (nombre:hex, separados por coma)</label><input type="text" required placeholder="Negro:#0a0a0a, Blanco:#f5f5f5" data-field="colors"></div>
+          </div>
+          <div class="flex" style="gap:0.8rem;">
+            <button type="button" class="btn btn-outline" data-cancel-product-form>Cancelar</button>
+            <button type="submit" class="btn btn-primary">Guardar Producto</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== PROMOCIONES ===== -->
+    <div class="admin-panel" data-panel="promociones">
+      <h2 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem;">Gestión De Promociones</h2>
+      <div class="admin-card">
+        <div data-promo-admin-list></div>
+      </div>
+    </div>
+
+    <!-- ===== PEDIDOS ===== -->
+    <div class="admin-panel" data-panel="pedidos">
+      <h2 style="font-family:var(--font-display);font-size:1.6rem;margin-bottom:1rem;">Pedidos Recibidos</h2>
+      <div class="admin-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Pedido</th><th>Fecha</th><th>Cliente</th><th>Pago</th><th>Total</th><th>Estado</th></tr></thead>
+            <tbody data-orders-table></tbody>
+          </table>
+        </div>
+        <p class="empty-state hidden" data-no-orders>Aún no hay pedidos registrados.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

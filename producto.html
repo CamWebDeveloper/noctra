@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Producto — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .gallery-main {
+    position: relative;
+    aspect-ratio: 3/4;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: var(--color-white-off);
+    cursor: zoom-in;
+    touch-action: pan-y;
+  }
+  .gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s ease;
+    transform-origin: center;
+  }
+  .gallery-main.zoomed img {
+    transform: scale(2);
+    cursor: zoom-out;
+  }
+  .gallery-thumbs {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.8rem;
+    overflow-x: auto;
+  }
+  .gallery-thumb {
+    flex: 0 0 auto;
+    width: 70px;
+    height: 90px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all var(--transition-fast);
+  }
+  .gallery-thumb.active {
+    border-color: var(--color-black);
+    opacity: 1;
+  }
+  .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .option-btn {
+    padding: 0.6rem 1.1rem;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+  }
+  .option-btn.active { background: var(--color-black); color: var(--color-white); border-color: var(--color-black); }
+  .option-btn:disabled { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+  .color-option-btn {
+    width: 38px; height: 38px; border-radius: 50%;
+    border: 2px solid var(--color-gray-100);
+    cursor: pointer; transition: all var(--transition-fast);
+  }
+  .color-option-btn.active { border-color: var(--color-black); transform: scale(1.1); }
+  .review-item { padding: 1.2rem 0; border-bottom: 1px solid var(--color-gray-100); }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left">
+      <button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button>
+    </div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+  <div class="quicklinks">
+    <div class="quicklinks-track" data-quicklinks></div>
+  </div>
+</header>
+
+<!-- ================= DETALLE DE PRODUCTO ================= -->
+<section class="section" style="padding-top:2rem;">
+  <div class="container" data-product-container>
+    <!-- Se renderiza vía JS -->
+  </div>
+</section>
+
+<!-- ================= PRODUCTOS RELACIONADOS ================= -->
+<section class="section" style="background:var(--color-white-off);">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-label">También Te Puede Gustar</span>
+      <h2 class="section-title">Productos Relacionados</h2>
+    </div>
+    <div class="products-grid" data-related-products></div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ================= DRAWERS ================= -->
+<div class="overlay" data-overlay></div>
+
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header">
+    <span class="drawer-title">Carrito</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm">
+      <span style="font-weight:600;">Subtotal</span>
+      <span style="font-weight:700;" data-cart-subtotal>$0.00</span>
+    </div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header">
+    <span class="drawer-title">Mi Cuenta</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/producto.js"></script>
+</body>
+</html>

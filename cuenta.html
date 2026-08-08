@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Cuenta — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .auth-wrapper { max-width: 440px; margin: 2rem auto; }
+  .auth-tabs { display:flex; gap:0; margin-bottom:2rem; border-bottom:1px solid var(--color-gray-200); }
+  .auth-tab { flex:1; padding:1rem; text-align:center; font-weight:600; font-size:0.9rem; color: var(--color-gray-500); border-bottom:2px solid transparent; }
+  .auth-tab.active { color: var(--color-black); border-color: var(--color-black); }
+  .auth-form { display:none; }
+  .auth-form.active { display:block; }
+  .form-field { margin-bottom: 1rem; }
+  .form-field label { display:block; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem; color: var(--color-gray-700); }
+  .form-field input {
+    width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-gray-300); border-radius: 8px; outline: none; font-size: 0.9rem;
+  }
+  .form-field input:focus { border-color: var(--color-black); }
+
+  .account-layout { display:grid; grid-template-columns:1fr; gap:2.5rem; }
+  @media (min-width:900px) { .account-layout { grid-template-columns: 240px 1fr; } }
+  .account-sidebar { display:flex; flex-direction:row; overflow-x:auto; gap:0.5rem; }
+  @media (min-width:900px) { .account-sidebar { flex-direction:column; } }
+  .account-nav-btn { padding:0.9rem 1.2rem; border-radius:8px; font-size:0.88rem; font-weight:600; text-align:left; white-space:nowrap; color: var(--color-gray-700); }
+  .account-nav-btn.active { background: var(--color-black); color: var(--color-white); }
+  .account-tab-panel { display:none; }
+  .account-tab-panel.active { display:block; }
+  .order-card { border:1px solid var(--color-gray-100); border-radius: var(--radius-md); padding:1.5rem; margin-bottom:1rem; }
+  .address-card { border:1px solid var(--color-gray-100); border-radius: var(--radius-md); padding:1.2rem; margin-bottom:1rem; }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left">
+      <button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button>
+    </div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+  <div class="quicklinks">
+    <div class="quicklinks-track" data-quicklinks></div>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2.5rem;">
+  <div class="container">
+
+    <!-- ============ VISTA: NO AUTENTICADO ============ -->
+    <div data-guest-view class="hidden">
+      <div class="auth-wrapper">
+        <div class="auth-tabs">
+          <button class="auth-tab active" data-auth-tab="login">Iniciar Sesión</button>
+          <button class="auth-tab" data-auth-tab="registro">Crear Cuenta</button>
+        </div>
+
+        <form class="auth-form active" data-auth-form="login">
+          <div class="form-field"><label>Correo electrónico</label><input type="email" required data-field="email"></div>
+          <div class="form-field"><label>Contraseña</label><input type="password" required data-field="password"></div>
+          <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+        </form>
+
+        <form class="auth-form" data-auth-form="registro">
+          <div class="form-field"><label>Nombre completo</label><input type="text" required data-field="name"></div>
+          <div class="form-field"><label>Correo electrónico</label><input type="email" required data-field="email"></div>
+          <div class="form-field"><label>Contraseña</label><input type="password" required data-field="password"></div>
+          <button type="submit" class="btn btn-primary btn-block">Crear Cuenta</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============ VISTA: AUTENTICADO ============ -->
+    <div data-account-view class="hidden">
+      <h1 class="section-title" style="font-size:2rem;margin-bottom:2rem;">Mi Cuenta</h1>
+
+      <div class="account-layout">
+        <nav class="account-sidebar">
+          <button class="account-nav-btn active" data-account-tab="perfil">Datos Personales</button>
+          <button class="account-nav-btn" data-account-tab="pedidos">Mis Pedidos</button>
+          <button class="account-nav-btn" data-account-tab="favoritos">Favoritos</button>
+          <button class="account-nav-btn" data-account-tab="direcciones">Direcciones</button>
+          <button class="account-nav-btn" data-account-tab="logout" style="color:var(--color-danger);">Cerrar Sesión</button>
+        </nav>
+
+        <div>
+          <!-- PERFIL -->
+          <div class="account-tab-panel active" data-account-panel="perfil">
+            <form data-profile-form style="max-width:420px;">
+              <div class="form-field"><label>Nombre completo</label><input type="text" data-field="name" required></div>
+              <div class="form-field"><label>Correo electrónico</label><input type="email" data-field="email" required></div>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+            </form>
+          </div>
+
+          <!-- PEDIDOS -->
+          <div class="account-tab-panel" data-account-panel="pedidos">
+            <div data-orders-list></div>
+          </div>
+
+          <!-- FAVORITOS -->
+          <div class="account-tab-panel" data-account-panel="favoritos">
+            <div class="products-grid" data-favorites-grid></div>
+          </div>
+
+          <!-- DIRECCIONES -->
+          <div class="account-tab-panel" data-account-panel="direcciones">
+            <div data-addresses-list></div>
+            <button class="btn btn-outline mt-sm" data-add-address>+ Añadir Dirección</button>
+
+            <form class="hidden mt-md" data-address-form style="max-width:420px;background:var(--color-white-off);padding:1.5rem;border-radius:var(--radius-md);">
+              <div class="form-field"><label>Etiqueta (Casa, Oficina...)</label><input type="text" required data-field="label"></div>
+              <div class="form-field"><label>Dirección</label><input type="text" required data-field="address"></div>
+              <div class="form-field"><label>Ciudad</label><input type="text" required data-field="city"></div>
+              <div class="form-field"><label>Código Postal</label><input type="text" required data-field="zip"></div>
+              <button type="submit" class="btn btn-primary">Guardar Dirección</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" data-overlay></div>
+
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header">
+    <span class="drawer-title">Carrito</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm">
+      <span style="font-weight:600;">Subtotal</span>
+      <span style="font-weight:700;" data-cart-subtotal>$0.00</span>
+    </div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header">
+    <span class="drawer-title">Mi Cuenta</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/cuenta.js"></script>
+</body>
+</html>

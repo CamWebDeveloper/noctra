@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Espera — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .drop-hero { position:relative; min-height:80vh; display:flex; align-items:center; color:#fff; overflow:hidden; }
+  .drop-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .drop-hero::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0.85)); }
+  .drop-content { position:relative; z-index:2; width:100%; text-align:center; }
+  .countdown { display:flex; justify-content:center; gap:1.2rem; margin:2rem 0; flex-wrap:wrap; }
+  .countdown-unit { min-width:80px; }
+  .countdown-number { font-family:var(--font-display); font-size:3rem; letter-spacing:0.02em; }
+  .countdown-label { font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--color-gray-300); }
+  .pieces-list { display:flex; flex-wrap:wrap; justify-content:center; gap:0.6rem; margin:1.5rem 0 2rem; }
+  .pieces-list li { list-style:none; border:1px solid rgba(255,255,255,0.3); border-radius:999px; padding:0.5rem 1.1rem; font-size:0.8rem; letter-spacing:0.05em; }
+  .waitlist-form { max-width:420px; margin:0 auto; display:flex; gap:0.6rem; }
+  .waitlist-form input { flex:1; padding:1rem 1.2rem; border-radius:8px; border:none; outline:none; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left"><button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button></div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+  <div class="quicklinks"><div class="quicklinks-track" data-quicklinks></div></div>
+</header>
+
+<section class="drop-hero">
+  <img data-drop-image src="" alt="Próximo lanzamiento">
+  <div class="container drop-content">
+    <span class="section-label" style="color:var(--color-silver);">Próximo Lanzamiento</span>
+    <h1 class="section-title" style="font-size:clamp(3rem,10vw,7rem);" data-drop-name></h1>
+    <p style="max-width:560px;margin:1rem auto 0;color:var(--color-gray-100);" data-drop-desc></p>
+
+    <div class="countdown" data-countdown></div>
+
+    <ul class="pieces-list" data-drop-pieces></ul>
+
+    <form class="waitlist-form" data-waitlist-form>
+      <input type="email" placeholder="Tu correo electrónico" required>
+      <button type="submit" class="btn btn-white">Reservar</button>
+    </form>
+    <p style="font-size:0.78rem;color:var(--color-gray-300);margin-top:0.8rem;" data-waitlist-message></p>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" data-overlay></div>
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header"><span class="drawer-title">Carrito</span><button class="btn-icon" data-close-drawer>✕</button></div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm"><span style="font-weight:600;">Subtotal</span><span style="font-weight:700;" data-cart-subtotal>$0.00</span></div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header"><span class="drawer-title">Mi Cuenta</span><button class="btn-icon" data-close-drawer>✕</button></div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/lista-espera.js"></script>
+</body>
+</html>

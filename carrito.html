@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrito — BLACK TITAN</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  .checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .checkout-grid { grid-template-columns: 1.5fr 1fr; }
+  }
+  .cart-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 1rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--color-gray-100);
+    align-items: center;
+  }
+  .cart-row img { width: 90px; height: 110px; object-fit: cover; border-radius: 8px; }
+  .form-field { margin-bottom: 1rem; }
+  .form-field label { display:block; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem; color: var(--color-gray-700); }
+  .form-field input, .form-field select {
+    width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--color-gray-300); border-radius: 8px; outline: none; font-size: 0.9rem;
+  }
+  .form-field input:focus, .form-field select:focus { border-color: var(--color-black); }
+  .form-row-2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .payment-tabs { display:flex; flex-wrap:wrap; gap:0.6rem; margin-bottom:1.2rem; }
+  .payment-tab {
+    flex:1; min-width:130px; padding:0.9rem; border:1px solid var(--color-gray-300); border-radius:8px;
+    text-align:center; font-size:0.8rem; font-weight:600; transition: all var(--transition-fast);
+  }
+  .payment-tab.active { border-color:var(--color-black); background:var(--color-black); color:var(--color-white); }
+  .summary-box { background: var(--color-white-off); border-radius: var(--radius-md); padding: 1.8rem; position: sticky; top: calc(var(--header-h) + 20px); }
+  .summary-row { display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:0.7rem; color: var(--color-gray-700); }
+  .summary-total { display:flex; justify-content:space-between; font-size:1.2rem; font-weight:700; margin-top:1rem; padding-top:1rem; border-top:1px solid var(--color-gray-300); }
+  .checkout-step { display:none; }
+  .checkout-step.active { display:block; }
+  .step-indicator { display:flex; gap:0.5rem; margin-bottom:2rem; font-size:0.78rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; color: var(--color-gray-400); flex-wrap:wrap; }
+  .step-indicator span.active { color: var(--color-black); }
+  .step-indicator span:not(:last-child)::after { content:"→"; margin-left:0.5rem; color: var(--color-gray-300); }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="header">
+  <div class="container header-inner">
+    <div class="header-left">
+      <button class="header-icon-btn" data-search-toggle aria-label="Buscar"></button>
+    </div>
+    <a href="index.html" class="logo">BLACK TITAN</a>
+    <div class="header-right">
+      <button class="header-icon-btn" data-open-cart aria-label="Carrito"></button>
+      <button class="header-icon-btn" data-open-profile aria-label="Perfil"></button>
+    </div>
+  </div>
+  <div class="container hidden" data-search-bar>
+    <form style="padding-bottom:1rem;" class="search-bar">
+      <input type="text" placeholder="Buscar productos..." required>
+      <button type="submit" class="btn-icon" aria-label="Buscar">→</button>
+    </form>
+  </div>
+  <div class="quicklinks">
+    <div class="quicklinks-track" data-quicklinks></div>
+  </div>
+</header>
+
+<section class="section" style="padding-top:2rem;">
+  <div class="container">
+
+    <div class="step-indicator" data-step-indicator>
+      <span data-step-label="cart" class="active">1. Carrito</span>
+      <span data-step-label="shipping">2. Envío</span>
+      <span data-step-label="payment">3. Pago</span>
+      <span data-step-label="done">4. Confirmación</span>
+    </div>
+
+    <div class="checkout-grid" data-checkout-wrapper>
+      <!-- ============ COLUMNA IZQUIERDA: PASOS ============ -->
+      <div>
+
+        <!-- PASO 1: CARRITO -->
+        <div class="checkout-step active" data-step="cart">
+          <h1 class="section-title" style="font-size:2rem;margin-bottom:1.5rem;">Tu Carrito</h1>
+          <div data-cart-items></div>
+          <div class="empty-state hidden" data-cart-empty>
+            Tu carrito está vacío. <a href="tienda.html" style="text-decoration:underline;">Ir a la tienda</a>
+          </div>
+          <div class="mt-md" data-cart-continue-wrap>
+            <button class="btn btn-primary" data-go-shipping>Continuar Al Envío</button>
+          </div>
+        </div>
+
+        <!-- PASO 2: ENVÍO -->
+        <div class="checkout-step" data-step="shipping">
+          <h1 class="section-title" style="font-size:2rem;margin-bottom:1.5rem;">Datos De Envío</h1>
+          <form data-shipping-form>
+            <div class="form-row-2">
+              <div class="form-field"><label>Nombre</label><input type="text" required data-field="firstName"></div>
+              <div class="form-field"><label>Apellido</label><input type="text" required data-field="lastName"></div>
+            </div>
+            <div class="form-field"><label>Correo electrónico</label><input type="email" required data-field="email"></div>
+            <div class="form-field"><label>Teléfono</label><input type="tel" required data-field="phone"></div>
+            <div class="form-field"><label>Dirección</label><input type="text" required data-field="address"></div>
+            <div class="form-row-2">
+              <div class="form-field"><label>Ciudad</label><input type="text" required data-field="city"></div>
+              <div class="form-field"><label>Código Postal</label><input type="text" required data-field="zip"></div>
+            </div>
+            <div class="flex" style="gap:0.8rem;margin-top:1.5rem;">
+              <button type="button" class="btn btn-outline" data-back-cart>Volver</button>
+              <button type="submit" class="btn btn-primary">Continuar Al Pago</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- PASO 3: PAGO -->
+        <div class="checkout-step" data-step="payment">
+          <h1 class="section-title" style="font-size:2rem;margin-bottom:1.5rem;">Método De Pago</h1>
+          <div class="payment-tabs" data-payment-tabs>
+            <button type="button" class="payment-tab active" data-method="card">Tarjeta</button>
+            <button type="button" class="payment-tab" data-method="paypal">PayPal</button>
+            <button type="button" class="payment-tab" data-method="mercadopago">Mercado Pago</button>
+            <button type="button" class="payment-tab" data-method="transfer">Transferencia</button>
+          </div>
+
+          <div data-payment-panels>
+            <!-- Tarjeta -->
+            <form data-payment-form="card">
+              <div class="form-field"><label>Número de tarjeta</label><input type="text" maxlength="19" placeholder="0000 0000 0000 0000" required data-field="cardNumber"></div>
+              <div class="form-row-2">
+                <div class="form-field"><label>Vencimiento</label><input type="text" placeholder="MM/AA" maxlength="5" required data-field="cardExp"></div>
+                <div class="form-field"><label>CVV</label><input type="text" maxlength="4" required data-field="cardCvv"></div>
+              </div>
+              <div class="form-field"><label>Nombre en la tarjeta</label><input type="text" required data-field="cardName"></div>
+              <button type="submit" class="btn btn-primary btn-block mt-sm">Pagar Con Tarjeta</button>
+            </form>
+
+            <!-- PayPal -->
+            <form data-payment-form="paypal" class="hidden">
+              <p style="color:var(--color-gray-500);font-size:0.9rem;margin-bottom:1rem;">Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+              <button type="submit" class="btn btn-primary btn-block">Pagar Con PayPal</button>
+            </form>
+
+            <!-- Mercado Pago -->
+            <form data-payment-form="mercadopago" class="hidden">
+              <p style="color:var(--color-gray-500);font-size:0.9rem;margin-bottom:1rem;">Serás redirigido a Mercado Pago para completar tu pago de forma segura.</p>
+              <button type="submit" class="btn btn-primary btn-block">Pagar Con Mercado Pago</button>
+            </form>
+
+            <!-- Transferencia -->
+            <form data-payment-form="transfer" class="hidden">
+              <div style="background:var(--color-white-off);border-radius:8px;padding:1.2rem;font-size:0.85rem;margin-bottom:1rem;">
+                <p><strong>Banco:</strong> Banco Titan</p>
+                <p><strong>Cuenta:</strong> 0123 4567 8901</p>
+                <p><strong>CLABE/IBAN:</strong> BT000123456789</p>
+                <p><strong>Referencia:</strong> <span data-transfer-ref></span></p>
+              </div>
+              <p style="color:var(--color-gray-500);font-size:0.85rem;margin-bottom:1rem;">Realiza la transferencia por el monto total y confirma abajo.</p>
+              <button type="submit" class="btn btn-primary btn-block">Ya Realicé La Transferencia</button>
+            </form>
+          </div>
+
+          <button type="button" class="btn btn-outline mt-sm" data-back-shipping>Volver</button>
+        </div>
+
+        <!-- PASO 4: CONFIRMACIÓN -->
+        <div class="checkout-step" data-step="done">
+          <div style="text-align:center;padding:2rem 0;">
+            <div style="font-size:3rem;">✓</div>
+            <h1 class="section-title" style="font-size:2rem;margin:1rem 0;">¡Pedido Confirmado!</h1>
+            <p style="color:var(--color-gray-500);margin-bottom:0.5rem;">Número de pedido: <strong data-order-number></strong></p>
+            <p style="color:var(--color-gray-500);margin-bottom:2rem;">Te enviamos la confirmación a tu correo. Entrega estimada: 3-7 días hábiles.</p>
+            <a href="tienda.html" class="btn btn-primary">Seguir Comprando</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ============ COLUMNA DERECHA: RESUMEN ============ -->
+      <div class="summary-box" data-summary-box>
+        <h3 style="font-weight:700;margin-bottom:1.2rem;">Resumen Del Pedido</h3>
+
+        <div style="display:flex;gap:0.6rem;margin-bottom:1.2rem;">
+          <input type="text" placeholder="Código de cupón" style="flex:1;padding:0.7rem 0.9rem;border:1px solid var(--color-gray-300);border-radius:8px;font-size:0.85rem;" data-coupon-input>
+          <button class="btn btn-outline btn-sm" data-apply-coupon>Aplicar</button>
+        </div>
+        <p style="font-size:0.8rem;color:var(--color-success);margin-bottom:1rem;" data-coupon-message></p>
+
+        <div class="summary-row"><span>Subtotal</span><span data-summary-subtotal>$0.00</span></div>
+        <div class="summary-row hidden" data-summary-discount-row><span>Descuento</span><span data-summary-discount>-$0.00</span></div>
+        <div class="summary-row"><span>Envío</span><span data-summary-shipping>$0.00</span></div>
+        <div class="summary-total"><span>Total</span><span data-summary-total>$0.00</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">BLACK TITAN</div>
+        <p class="footer-about">Moda urbana premium. Minimalista, lujosa y auténtica. Built For The Uncommon.</p>
+        <div class="footer-social" data-footer-social></div>
+      </div>
+      <div>
+        <div class="footer-heading">Tienda</div>
+        <ul class="footer-links">
+          <li><a href="tienda.html">Catálogo</a></li>
+          <li><a href="promociones.html">Promociones</a></li>
+          <li><a href="lista-espera.html">Próximo Lanzamiento</a></li>
+          <li><a href="blog.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Preguntas Frecuentes</div>
+        <ul class="footer-links">
+          <li><strong style="color:var(--color-silver);">¿Envíos?</strong> 3-7 días hábiles a todo el país.</li>
+          <li><strong style="color:var(--color-silver);">¿Cambios?</strong> 30 días desde la compra.</li>
+          <li><strong style="color:var(--color-silver);">¿Horario?</strong> Lun–Sáb, 9am–7pm.</li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Contacto</div>
+        <ul class="footer-links">
+          <li>hola@blacktitan.com</li>
+          <li>+1 (555) 123-4567</li>
+          <li>Ciudad de México, MX</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span data-year></span> Black Titan. Todos los derechos reservados.</span>
+      <span>Proyecto ficticio de portafolio.</span>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" data-overlay></div>
+
+<div class="drawer" data-drawer="cart">
+  <div class="drawer-header">
+    <span class="drawer-title">Carrito</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-cart-body></div>
+  <div class="drawer-footer" data-cart-footer>
+    <div class="flex-between mb-sm">
+      <span style="font-weight:600;">Subtotal</span>
+      <span style="font-weight:700;" data-cart-subtotal>$0.00</span>
+    </div>
+    <a href="carrito.html" class="btn btn-primary btn-block">Ir Al Carrito</a>
+  </div>
+</div>
+
+<div class="drawer" data-drawer="profile">
+  <div class="drawer-header">
+    <span class="drawer-title">Mi Cuenta</span>
+    <button class="btn-icon" data-close-drawer>✕</button>
+  </div>
+  <div class="drawer-body" data-profile-body></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/main.js"></script>
+<script src="js/carrito.js"></script>
+</body>
+</html>
